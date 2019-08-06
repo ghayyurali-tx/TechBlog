@@ -1,0 +1,198 @@
+<%if current_user %>
+
+<!--  <section id="section-services" class="section pad-bot30 bg-white">-->
+<!--    <div class="container">-->
+<!--      <div class="row">-->
+<!--        <div class="col-md-6">-->
+<!--          <h1>My Blog</h1>-->
+<!--          <h5><span class="label label-info">Logged in as <%#= current_user.email %> </span></h5>-->
+
+<!--        </div>-->
+
+<!--        <div class="col-md-6">-->
+<!--          <div class="row">-->
+            <%#= form_tag(root_url, method: :get, html: {class: 'form-search'}) do %>
+<!--              <form class="form-search">-->
+
+<!--                <div class="col-md-6"></div>-->
+<!--                <div class="col-md-6">-->
+
+
+<!--                  <div class="form-group">-->
+                    <%#= text_field_tag :search, params[:search],class: 'form-control', placeholder: 'Search Articles', value: '' %>
+                    <%#= submit_tag 'Search', name: nil,class: 'btn btn-primary' %>
+<!--                    <button type="submit" class="btn btn-primary" data-disable-with="Go">-->
+<!--                      Go-->
+<!--                    </button>-->
+
+<!--                  </div>-->
+<!--                </div>-->
+<!--              </form>-->
+            <%# end %>
+<!--          </div>-->
+<!--        </div>-->
+<!--      </div>-->
+
+
+<!--      <div>-->
+<!--        <span class="label label-primary"> Logged in as <%#= current_user.email %></span>-->
+
+        <%#= link_to 'My Articles', user_articles_path(current_user), class: 'btn btn-success btn-xs' %>
+        <%#= link_to 'Profile',current_user,class: 'btn btn-info btn-xs'%>
+        <%# if current_user.role == "admin" %>
+          <%#= link_to 'Admin Panel', users_path, class: 'btn btn-danger btn-xs' %>
+        <%#end %>
+        <%#= link_to 'Log Out', logout_path, class: 'btn btn-danger btn-xs' %>
+<!--        <br><br>-->
+
+        <%#= link_to new_user_article_path(current_user) ,class: 'btn btn-success btn-lg' do%>
+<!--          <i class="glyphicon glyphicon-plus"></i> Create Article-->
+        <%#end %>
+
+
+<!--      </div>-->
+<!--    </div>-->
+<!--  </section>-->
+
+<!--   header section-->
+  <section id="section-services" class="section pad-bot30 bg-white">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-2">
+          <a href="<%=root_path %>">
+            <h1>My Blog</h1></a>
+          <h6><span class="label label-info">Logged in as <%= current_user.email %> </span></h6>
+<!--          <img class="navbar-logo" src="img/logo.png" alt="Vector Logo" style="width: 35%">-->
+        </div>
+        <div class="col-md-10">
+          <div class="row">
+            <div class="col-md-8">
+<!--              <a class="btn btn-default" href="Logged in as admin@gamil.com"> Logged in as admin@gamil.com </a>-->
+              <a class="btn btn-default" href="<%=new_user_article_path(current_user) %>"> + Create Article</a>
+              <a class="btn btn-default" href="<%=user_articles_path(current_user) %>"> My Articles</a>
+              <a class="btn btn-default" href="<%=user_path(current_user) %>"> Profile </a>
+              <% if current_user.role == "admin" %>
+              <a class="btn btn-default" href="<%=users_path %>"> Admin Panel </a>
+                <%end %>
+              <a class="btn btn-default" href="<%=logout_path %>"> Log Out </a>
+            </div>
+<!--            Search Begin-->
+            <div class="col-md-4">
+              <%= form_tag(root_url, method: :get, html: {class: 'form-search'}) do %>
+              <form class="form-search">
+
+                <div class="form-group">
+                  <%= text_field_tag :search, params[:search],class: 'form-control', placeholder: 'Search Articles', value: '' %>
+                  <%#= submit_tag name: nil,class: 'btn btn-primary' %>
+                  <button type="submit" class="btn btn-primary">
+                    <i class="fa fa-search"></i>
+                  </button>
+
+                </div>
+              </form>
+                <%end %>
+            </div>
+<!--            Search End-->
+          </div>
+        </div>
+<!--        <div class="col-md-12">-->
+<!--          <a href="create_article.html" class="btn btn-success">+ Create Article</a>-->
+<!--        </div>-->
+      </div>
+    </div>
+  </section>
+
+  <section id="section-works" class="section appear clearfix">
+    <div class="container">
+      <%# @articles  = Article.all%>
+      <% @articles  = Article.paginate(:page => params[:page], :per_page=>6)%>
+      <%#  if params[:search] %>
+      <%#@articles = Article.search(params[:search]) %>
+
+        <%#else %>
+        <% if params[:tag] %>
+        <% @articles = Article.tagged_with(params[:tag]).paginate(:page => params[:page], :per_page=>6)%>
+        <%# @articles  = Article.paginate(:page => params[:page], :per_page=>6)%>
+      <% if @articles.count == 0  %>
+        <h2 class="text-danger">No Article Found</h2>
+        <%=link_to 'Return to Articles',  root_url, class: 'btn btn-info' %>
+      <%else %>
+      <%end %>
+        <%end %>
+
+        <%  if params[:search] %>
+          <%@articles = Article.paginate(:page => params[:page], :per_page=>6).search(params[:search]) %>
+          <%# @articles  = Article.paginate(:page => params[:page], :per_page=>6)%>
+          <% if @articles.count == 0  %>
+            <h2 class="text-danger">No Article Found</h2>
+            <%=link_to 'Return to Articles',  root_url, class: 'btn btn-info' %>
+          <%else %>
+          <%end %>
+
+         <%end %>
+      <%# if params[:search] || params[:Tag] %>
+      <%#else %>
+        <%= will_paginate @articles %>
+      <%#end %>
+      <div class="row">
+        <div class="col-md-12">
+          <div class="row">
+            <div class="portfolio-items isotopeWrapper clearfix" id="3">
+
+
+              <% @articles.each do |article| %>
+
+                <article class="col-md-4">
+                  <div class="imgBlock">
+                    <div class="img-container">
+                      <%# if article.image.attached? %>
+                        <%#= image_tag article.image.variant(combine_options: { resize: "720x550^", extent: "720x550^", auto_orient: true, gravity: "center"}).processed, alt: 'Image', class: 'img-responsive' %>
+                      <%#else %>
+                        <%= image_tag("portfolio/img1.jpg") %>
+                      <%#end %>
+                      <div class="img-overlay">
+                        <p class="img-btn">
+                          <span class="date"><%= article.updated_at.strftime("%b %d, %Y") %></span>
+                          <%if article.likes.count == 0 %>
+                          <%else %>
+                            <span>|</span>
+                            <span class="url-text"><%= article.likes.count %> <%= (article.likes.count) == 1 ? 'Like' : 'Likes'%></span>
+                          <%end %>
+
+                          <% if article.user == current_user || current_user.role == "admin" %>
+                            <span>|</span>
+                            <%= link_to 'Edit', edit_user_article_path(current_user,article), class: "url-text"%>
+                            <span>|</span>
+                            <%= link_to 'Delete', [article.user, article],
+                                        method: :delete,
+                                        data: { confirm: 'Are you sure?' }, class: 'url-text' %>
+                          <%end %>
+                          <h2 class="h2-text">
+                            <a href="<%= user_article_path(current_user,article)%>"><%=truncate(article.title, length: 65) %></a>
+                          </h2>
+                          </p>
+                          </div>
+                    </div>
+                  </div>
+                </article>
+              <%end %>
+
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+<%end %>
+<div class="container">
+  <% if params[:search] || params[:Tag] %>
+  <%else %>
+    <%= will_paginate @articles %>
+  <%end %>
+</div>
+  </section>
+
+
+
+

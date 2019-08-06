@@ -1,0 +1,11 @@
+<% if current_user %>
+  <% if current_user.role == 'admin' %>
+    <%= render 'new_index' %>
+<%else %>
+  <div class="container">
+    <div class="text-center">
+      <h1><span class="label label-danger">
+    ONLY ADMIN CAN VIEW THIS</span></h1></div></div>
+  <%end %>
+
+<%end %>

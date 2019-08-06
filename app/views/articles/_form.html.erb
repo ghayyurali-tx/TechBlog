@@ -1,0 +1,34 @@
+<%= form_with scope: :article, url: user_articles_path, html: { multipart: true }, local: true do |form| %>
+  <div class="form-group">
+
+  <% if @article.errors.any? %>
+    <div id="error_explanation">
+
+        <% @article.errors.full_messages.each do |msg| %>
+        <p class = "text text-danger">*&nbsp<%= msg %></p>
+        <% end %>
+    </div>
+  <% end %>
+
+
+    <%= form.label :title %><p>
+    <%= form.text_field :title, class: 'form-control' %>
+  </p>
+
+
+
+    <%= form.label :text %><p>
+    <%= form.text_area :text, class: 'form-control' %>
+  </p>
+
+    <%= form.label :image %><p>
+    <%= form.file_field :image, onchange: 'validateFiles(this);',data: { max_file_size: 5.megabytes } ,required: true %>
+  </p>
+
+  <p>
+    <%= form.submit 'Submit', class: "btn btn-success btn-xs" %>
+    <%= link_to 'Cancel',user_articles_path, class: 'btn btn-danger btn-xs' %>
+  </p>
+
+  </div>
+<% end %>
