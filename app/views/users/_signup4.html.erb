@@ -1,0 +1,93 @@
+<div class="m-grid m-grid--hor m-grid--root m-page">
+  <div class="m-grid__item m-grid__item--fluid m-grid m-grid--hor m-login m-login--signin m-login--2 m-login-2--skin-1" id="m_login" style="background-image: url(assets/app/media/img//bg/bg-7.jpg);">
+    <div class="m-grid__item m-grid__item--fluid m-login__wrapper">
+      <div class="m-login__container">
+        <div class="m-login__signin">
+          <div class="m-login__logo">
+            <a href="<%=root_url %>">
+              <img src="assets/app/media/img//logos/logo-1.png">
+            </a>
+          </div>
+          <div class="m-login__head">
+            <h3 class="m-login__title">
+              Sign Up
+            </h3>
+            <div class="m-login__desc">
+              Enter your details to create your account:
+            </div>
+          </div>
+          <%= form_with model: @user, class: 'm-login__form m-form', local: true do |form| %>
+          <form class="m-login__form m-form" action="">
+            <div class="form-group m-form__group">
+              <% if @user.errors.any? %>
+                <div id="error_explanation">
+
+
+                  <% @user.errors.full_messages.each do |msg| %>
+
+                    <p class = "text text-danger">*&nbsp<%= msg %></p>
+
+                  <% end %>
+
+                </div>
+              <% end %>
+            </div>
+
+            <div class="form-group m-form__group">
+              <%=form.text_field :name, class: 'form-control m-input',placeholder:"Full Name", required: '' %>
+<!--              <input class="form-control m-input" type="text" placeholder="Fullname" name="user[name]" required="">-->
+            </div>
+            <div class="form-group m-form__group">
+              <%=form.text_field :email, class: 'form-control m-input',placeholder:"Email", required: '' %>
+<!--              <input class="form-control m-input" type="text" placeholder="Email" name="user[email]" required="">-->
+            </div>
+            <div class="form-group m-form__group">
+              <%=form.password_field :password, class: 'form-control m-input',placeholder:"Password", required: '' %>
+<!--              <input class="form-control m-input" type="password" placeholder="Password" name="user[password]" required="">-->
+            </div>
+            <div class="form-group m-form__group">
+              <%=form.password_field :password_confirmation, class: 'form-control m-input',placeholder:"Confirm Password", required: '' %>
+<!--              <input class="form-control m-input m-login__form-input--last" type="password" placeholder="Confirm Password" name="user[password_confirmation]" required="">-->
+            </div>
+            <div class="form-group m-form__group">
+              <div class="m-login__form-action">
+<!--              <div class="m-login__form-action">-->
+<!--              <br>&nbsp&nbsp-->
+
+              <%=form.file_field :avatar, onchange: 'validateFiles(this);',data: { max_file_size: 5.megabytes },class: "btn m-btn m-btn--pill m-btn--custom m-btn--air m-login__btn m-login__btn--primary" ,required: true %>
+              <!--              <input class="form-control m-input" type="text" placeholder="Email" name="user[email]" required="">-->
+              </div>
+            </div>
+
+<!--            </div>-->
+            <!--<div class="row form-group m-form__group m-login__form-sub">-->
+            <!--<div class="col m&#45;&#45;align-left">-->
+            <!--<label class="m-checkbox m-checkbox&#45;&#45;light">-->
+            <!--<input type="checkbox" name="agree">-->
+            <!--I Agree the-->
+            <!--<a href="#" class="m-link m-link&#45;&#45;focus">-->
+            <!--terms and conditions-->
+            <!--</a>-->
+            <!--.-->
+            <!--<span></span>-->
+            <!--</label>-->
+            <!--<span class="m-form__help"></span>-->
+            <!--</div>-->
+            <!--</div>-->
+            <div class="m-login__form-action">
+              <%= form.submit 'Submit',class: "btn m-btn m-btn--pill m-btn--custom m-btn--air m-login__btn m-login__btn--primary" %>
+<!--              <button type="submit" name="commit" value="Sign Up Free" data-disable-with="Sign Up Free" class="btn m-btn m-btn--pill m-btn--custom m-btn--air m-login__btn m-login__btn--primary">-->
+<!--                Sign Up-->
+<!--              </button>-->
+              &nbsp;&nbsp;
+              <a href="<%=root_url %>" class="btn m-btn m-btn--pill m-btn--custom m-btn--air m-login__btn">
+                Cancel
+              </a>
+            </div>
+          </form>
+            <%end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

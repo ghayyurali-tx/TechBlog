@@ -1,0 +1,288 @@
+<!--   header section-->
+<section id="section-services" class="section pad-bot30 bg-white">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-2">
+        <a href="<%=root_path %>">
+          <h1>My Blog</h1></a>
+        <h6><span class="label label-info">Logged in as <%= current_user.email %> </span></h6>
+        <!--          <img class="navbar-logo" src="img/logo.png" alt="Vector Logo" style="width: 35%">-->
+      </div>
+      <div class="col-md-10">
+        <div class="row">
+          <div class="col-md-8">
+            <!--              <a class="btn btn-default" href="Logged in as admin@gamil.com"> Logged in as admin@gamil.com </a>-->
+            <a class="btn btn-default" href="<%=new_user_article_path(current_user) %>"> + Create Article</a>
+            <a class="btn btn-default" href="<%=root_path %>"> Home</a>
+            <a class="btn btn-default" href="<%=user_path(current_user) %>"> Profile </a>
+            <% if current_user.role == "admin" %>
+              <a class="btn btn-default" href="<%=users_path %>"> Admin Panel </a>
+            <%end %>
+            <a class="btn btn-default" href="<%=logout_path %>"> Log Out </a>
+          </div>
+          <!--            Search Begin-->
+          <div class="col-md-4">
+            <%= form_tag(root_url, method: :get, html: {class: 'form-search'}) do %>
+              <form class="form-search">
+
+                <div class="form-group">
+                  <%= text_field_tag :search, params[:search],class: 'form-control', placeholder: 'Search Articles', value: '' %>
+                  <%#= submit_tag name: nil,class: 'btn btn-primary' %>
+                  <button type="submit" class="btn btn-primary">
+                    <i class="fa fa-search"></i>
+                  </button>
+
+                </div>
+              </form>
+            <%end %>
+          </div>
+          <!--            Search End-->
+        </div>
+      </div>
+      <!--        <div class="col-md-12">-->
+      <!--          <a href="create_article.html" class="btn btn-success">+ Create Article</a>-->
+      <!--        </div>-->
+    </div>
+  </div>
+</section>
+
+<!-- section works -->
+<section id="section-works" class="section appear clearfix">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+
+        <h1><%= @article.title %> </h1>
+      </div>
+      <div class="col-md-12">
+        <div class="row">
+          <div class="col-md-1">
+<!--            <img src="/img/user.jpg" alt="User image" class="user_image">-->
+            <%# if @article.user.avatar.attached? %>
+              <%#= image_tag @article.user.avatar, alt: "User image", class: "user_image"%>
+            <%#else %>
+              <img src="/img/user.jpg" alt="User image" class="user_image">
+            <%#end %>
+          </div>
+          <div class="col-md-2">
+
+              <%=@article.user.name %><span>&nbsp&nbsp</span>
+              <%@user = User.find(params[:user_id]) %>
+              <% if @article.user == current_user || current_user.role == "admin" %>
+                <a class="btn btn-default btn-follow btn-xs" href="<%=edit_user_article_path(@article.user_id, @article) %>"> Edit Article </a>
+                <%#= link_to 'Edit Article', edit_user_article_path(@article.user_id, @article),class: 'btn btn-warning btn-xs'%>
+              <%else %>
+
+<!--                <a class="btn btn-default btn-follow btn-xs" data-method="post" href="<%#=relationship_path(@user) %>"> Follow </a>-->
+            <% pre_follow = current_user.active_relationships.find_by(followed_id: @article.user_id) %>
+            <% if !pre_follow %>
+                  <%= form_for(current_user.active_relationships.build, local: true) do |f| %>
+                    <%= hidden_field_tag :followed_id, @article.user.id %>
+                    <%= f.submit "Follow", class: "btn btn-default btn-follow btn-xs" %>
+                <%end %>
+                <%else %>
+                  <%= form_for(current_user.active_relationships.find_by(followed_id: @article.user_id), html: { method: :delete }, local: true) do |f| %>
+                    <%= f.submit "Unfollow", class: "btn btn-default btn-follow btn-xs" %>
+                    <%end %>
+                <%end %>
+                <%end %>
+
+
+
+
+
+                <%# if !current_user.following?(@article.user_id) %>
+                    <%#= form_for(current_user.active_relationships.build, remote: true) do |f| %>
+<!--                      <div><%#= hidden_field_tag :followed_id, @article.user.id %></div>-->
+                      <%#= f.submit "Follow", class: "btn btn-default btn-follow" %>
+                    <%# end %>
+
+                    <%#end %>
+                    <%#end %>
+
+
+
+
+            <p>Last update:<span>&nbsp</span> <%= @article.updated_at.strftime("%b %d, %Y") %></p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-12">
+        <br>
+        <%# if @article.image.attached? %>
+          <%#= image_tag @article.image, alt: 'Back Ground image', class: 'bc-image'%>
+        <%#else %>
+          <%#= image_tag("portfolio/img1.jpg", alt: 'Back Ground image', class: 'bc-image') %>
+          <img src="/img/bg-4.jpg" alt="Back Ground image" class="bc-image">
+        <%#end %>
+<!--        <img src="/img/bg-4.jpg" alt="Back Ground image" class="bc-image">-->
+      </div>
+      <div class="col-md-12">
+        <p class="blog-para">
+
+          <%= sanitize @article.text, tags: %w(strong em a b font br p table tbody tr td ol li u img iframe span blockquote pre h1 h2 h3 h4 h5 h6 div strike hr),
+                       attributes: %w(href face class src style ta rget frameborder width height color) %>
+
+        </p>
+        <br>
+      </div>
+      <div class="col-md-12">
+        <div class="row">
+          <div class="col-md-10">
+<!--            <a class="btn btn-default btn-follow" href="#"> Follow </a>-->
+<!--            <a class="btn btn-default btn-follow" href="#"> Follow </a>-->
+<!--            <a class="btn btn-default btn-follow" href="#"> Follow </a>-->
+<!--            <a class="btn btn-default btn-follow" href="#"> Follow </a>-->
+<!--            <a class="btn btn-default btn-follow" href="#"> Follow </a>-->
+           Tags:&nbsp <%=raw tag_links(@article.all_tags)%>
+          </div>
+          <div class="col-md-2">
+            <% pre_like = @article.likes.find { |like| like.user_id == current_user.id} %>
+            <% if pre_like %>
+              <a class="btn btn-primary btn-like" data-method="delete" href="<%=article_like_path(@article, pre_like) %>"> Unlike </a>
+              <%#= link_to 'Unlike', article_like_path(@article, pre_like), method: :delete, class: 'btn btn-danger btn-xs' %>
+            <% else %>
+              <a class="btn btn-primary btn-like" data-method="post" href="<%=article_likes_path(@article) %>"> Like </a>
+              <%#= link_to 'Like', article_likes_path(@article), method: :post,class: 'btn btn-success btn-xs'  %>
+            <% end %>
+<!--            <a class="btn btn-primary btn-like" href="#"> Like </a>-->
+            <span style="margin-left: 20%"><%= @article.likes.count %></span>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-12">
+        <hr class="blog-hr">
+      </div>
+      <div class="col-md-12">
+        <div class="row">
+          <div class="col-md-2">
+<!--            <img src="/img/user.jpg" alt="User image" class="user_image">-->
+            <%# if @article.user.avatar.attached? %>
+              <%#= image_tag @article.user.avatar, alt: "User image", class: "user_image"%>
+            <%#else %>
+              <img src="/img/user.jpg" alt="User image" class="user_image">
+            <%#end %>
+          </div>
+          <div class="col-md-8">
+            <h4>Written by</h4>
+            <h2><%=@article.user.name %></h2>
+<!--            <p>-->
+<!--              Writes about relationships and pop psychology for The New York Times, Vice, and more. Author of “Clearly, I Didn’t Think This Through.” Lives in Philly.-->
+<!--            </p>-->
+          </div>
+<!--          <div id="follow_form">-->
+            <div class="col-md-2">
+            <%# if current_user.following?(@article.user_id) %>
+<!--              <a class="btn btn-default btn-follow" href="#"> Follow </a>-->
+
+
+              <!--                <a class="btn btn-default btn-follow btn-xs" data-method="post" href="<%#=relationship_path(@user) %>"> Follow </a>-->
+              <% if @article.user == current_user %>
+                <%else %>
+                <% pre_follow = current_user.active_relationships.find_by(followed_id: @article.user_id) %>
+                <% if !pre_follow %>
+                  <%= form_for(current_user.active_relationships.build, local: true) do |f| %>
+                    <%= hidden_field_tag :followed_id, @article.user.id %>
+                    <%= f.submit "Follow", class: "btn btn-default btn-follow" %>
+                  <%end %>
+                <%else %>
+                  <%= form_for(current_user.active_relationships.find_by(followed_id: @article.user_id), html: { method: :delete }, local: true) do |f| %>
+                    <%= f.submit "Unfollow", class: "btn btn-default btn-follow" %>
+                  <%end %>
+                <%end %>
+                <%end %>
+
+
+                <%#= form_for(current_user.active_relationships.build, remote: true) do |f| %>
+<!--                  <div><%#= hidden_field_tag :followed_id, @user.id %></div>-->
+                  <%#= f.submit "Follow", class: "btn btn-default btn-follow" %>
+                <%# end %>
+            <%# else %>
+<!--              <a class="btn btn-default btn-follow" href="#"> Unfollow </a>-->
+
+                <%#= form_for(current_user.active_relationships.find_by(followed_id: @user.id), html: { method: :delete }, remote: true) do |f| %>
+                  <%#= f.submit "Unfollow", class: "btn btn-default btn-follow" %>
+                <%# end %>
+            <%# end %>
+<!--          </div>-->
+          </div>
+<!--          <div class="col-md-2">-->
+<!--            <a class="btn btn-default btn-follow" href="#"> Follow </a>-->
+<!--          </div>-->
+        </div>
+      </div>
+      <div class="col-md-12">
+        <hr class="blog-hr">
+      </div>
+      <div class="col-md-12 comment-section">
+        <h2>Comments</h2>
+        <div class="row">
+          <% @article.comments.each do |comment| %>
+            <% @user= comment.user%>
+            <%# @user = User.find(params[id]) %>
+          <div class="col-md-12">
+
+            <div class="row">
+              <br>
+              <div class="col-md-1">
+
+                <%#debugger %>
+<!--                <img src="/img/user.jpg" alt="User image" class="comment_image">-->
+                <%# if @user.avatar.attached? %>
+                  <%#= image_tag @user.avatar, alt: "User image", class: "comment_image"%>
+                <%#else %>
+                  <img src="/img/user.jpg" alt="User image" class="comment_image">
+                <%#end %>
+              </div>
+              <div class="col-md-8">
+                <p>
+                 <strong> <%= comment.commenter %></strong>
+                </p>
+
+                <p>
+                 <%= comment.body %>
+                </p>
+
+                <p>
+                  <% if comment.user == current_user || current_user.role == "admin"  %>
+                    <%= link_to 'Remove', [@article.user,comment.article, comment],
+                                method: :delete,
+                                data: { confirm: 'Are you sure?' } %>
+                  <%end %>
+                </p>
+
+              </div>
+            </div>
+          </div>
+            <%end %>
+          <%= form_with(model: [ current_user,@article, @article.comments.build ], local: true) do |form| %>
+          <div class="col-md-12">
+
+            <form>
+              <br>
+              <p>
+                <%= form.text_field :commenter, value: current_user.name, class: 'hide' %></p>
+
+              <p>
+                <%= form.text_area :body, class:'form-control col-md-12'%><br></p>
+              <p>
+
+                <%= form.submit 'Submit', class: 'btn btn-success btn-sm', style: 'margin-top: 2%; float: left;' %>
+              </p>
+<!--              <textarea class="form-control col-md-12"></textarea>-->
+<!--              <button class="btn btn-success" style="margin-top: 2%; float: right;">Submit</button>-->
+            </form>
+          </div>
+        </div>
+            <%end %>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!--<script type="text/javascript">-->
+<!--    $(document).ready(function() {-->
+<!--        $('#code_preview0').summernote({height: 200});-->
+<!--    });-->
+<!--</script>-->
+
